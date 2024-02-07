@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+
+class PowerOfTwoMaxHeap {
+    private ArrayList<Integer> heap;
+    private int x;
+
+    public PowerOfTwoMaxHeap(int x) {
+        this.heap = new ArrayList<>();
+        this.x = x;
+    }
+
+    public void insert(int value) {
+        heap.add(value);
+        heapifyUp(heap.size() - 1);
+    }
+
+    public int popMax() {
+        if (heap.isEmpty()) {
+            throw new IllegalStateException("Heap is empty");
+        }
+
+        int max = heap.get(0);
+        heap.set(0, heap.get(heap.size() - 1));
+        heap.remove(heap.size() - 1);
+        heapifyDown(0);
+        return max;
+    }
+
+    private void heapifyUp(int index) {
+        while (index > 0) {
+            int parent = (index - 1) / x;
+            if (heap.get(parent) < heap.get(index)) {
+                swap(parent, index);
+                index = parent;
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void heapifyDown(int index) {
+        int largest = index;
+        for (int i = 1; i <= x; i++) {
+            int child = x * index + i;
+            if (child < heap.size() && heap.get(child) > heap.get(largest)) {
+                largest = child;
+            }
+        }
+        if (largest != index) {
+            swap(index, largest);
+            heapifyDown(largest);
+        }
+    }
+
+    private void swap(int i, int j) {
+        int temp = heap.get(i);
+        heap.set(i, heap.get(j));
+        heap.set(j, temp);
+    }
+}
